@@ -18,6 +18,16 @@ feature_dir = '/data/hz2529/zion/MVPContext/combined_feature_2021_v2'
 #md22
 feature_dir = '/mnt/BigData/hz2529/gMVP/feature/combined_feature_2021_v2/'
 
+'''
+Still figyring out how this all works, but right now it looks  like there's two input
+sources: 
+- We have protein contact/co-evolution matrices (/data/hz2529/zion/MVPContext/combined_feature_2021_v2/*.pickle)
+- there's a dataframe that has metadata floating around somewhere, that has addtional
+  info we need to encode
+
+'''
+
+
 
 def _bytes_feature(value):
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
@@ -61,6 +71,15 @@ def _build_one_var(r, feature, width):
 
 
 def build_one_transcript(df, tf_writer):
+    """[summary]
+
+    Args:
+        df ([type]): [description]
+        tf_writer ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """    
     transcript_id = df.iloc[0]['transcript_id']
 
     feature_path = f'{feature_dir}/{transcript_id}.pickle'
