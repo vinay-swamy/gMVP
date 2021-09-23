@@ -6,8 +6,25 @@ import tensorflow_probability as tfp
 from model import ModelBase
 
 from constant_params import window_size
-
+# so are all proteins 128*2 + 1 aa long?
 from layers import EvolEncoder2, MultiHeadAttention
+
+
+'''
+Model Architecture
+    Inputs: ref_aa, alt_aa, features[hhblits, compara_msa, struc, region]
+    
+    ref_aa, alt_aa             compara_msa
+           |                       |
+        onehot +               EvolEncoder2
+           |                       |
+
+'''
+
+
+
+
+
 
 
 class ModelAttention(ModelBase):

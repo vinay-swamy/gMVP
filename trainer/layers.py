@@ -13,7 +13,9 @@ class EvolEncoder2(tf.keras.layers.Layer):
         self.num_species = num_species
         self.pairwise_type = pairwise_type
         self.weighting_schema = weighting_schema
-
+    '''
+    layer.build initializes weights for the model 
+    '''
     def build(self, input_shape):
         if self.weighting_schema == 'spe':
             self.W = self.add_weight(
@@ -36,6 +38,11 @@ class EvolEncoder2(tf.keras.layers.Layer):
             raise NotImplementedError(
                 f'weighting_schema {weighting_schema} NotImplementedError')
 
+    '''
+    analgous to torchlayer::forward
+    '''
+    
+    
     def call(self, x):
         shape = tf.shape(x)
         B, L, N = shape[0], shape[1], shape[2] // 2
