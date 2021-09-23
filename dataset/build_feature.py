@@ -1,3 +1,4 @@
+#%%
 import random
 import pandas as pd
 import argparse
@@ -16,8 +17,11 @@ random.seed(2020)
 
 base_dir = '/data/hz2529/zion/MVPContext/'
 feature_dir = f'{base_dir}/feature'
-output_dir = f'{base_dir}/combined_feature_2021_v2'
+output_dir = '/home/vss2134/gMVP/dataset/build_feature_out'
 
+##ADDED
+os.chdir('/data/hz2529/zion/MVPContext/')
+##
 
 def read_compara(path):
     res = []
@@ -27,7 +31,7 @@ def read_compara(path):
             name, _perc_id, seq = line.strip().split('\t')
             if name == 'homosapien':
                 _perc_id = 100.0
-            else:
+            else:  
                 _perc_id = float(_perc_id)
             seq = [util.aa_index(a) for a in seq]
             res.append(seq)
@@ -79,7 +83,7 @@ feature schema
 
 
 #both start and end are 1-based and inclusive.
-def build_one_transcript(transcript_id):
+def build_one_transcript_feature(transcript_id):
     hhblits_path = f'{feature_dir}/{transcript_id}.99.diff0.hhm.npy'
     netsurfp2_path = f'{feature_dir}/{transcript_id}.netsurfp2.json'
     compara_path = f'{feature_dir}/{transcript_id}.compara103'
@@ -110,13 +114,17 @@ def build_one_transcript(transcript_id):
 
     #print(hhblits.shape, hhblits2.shape, hhblits3.shape, hhblits4.shape,
     #      compara.shape, struc.shape, region.shape, gene.shape)
-
+    print(('hhblits' ,hhblits.shape))
+    print(('compara', compara.shape))
+    print(('struc', struc.shape))
+    print(('region', region.shape))
     feature = np.concatenate([hhblits, compara, struc, region], axis=-1)
     print(feature.shape)
 
     output_path = f'{output_dir}/{transcript_id}.pickle'
     with open(output_path, 'wb') as fw:
         pickle.dump(feature, fw)
+    return feature
 
 
 def build(name_list):
@@ -149,7 +157,7 @@ def build_multi_thread(input_path, cpu):
             p.start()
         for p in pool:
             p.join()
-
+#%%
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
