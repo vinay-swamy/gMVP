@@ -1,3 +1,4 @@
+#%%
 import random
 import pandas as pd
 import argparse
@@ -14,9 +15,10 @@ import util
 random.seed(2020)
 
 #shannon
-feature_dir = '/data/hz2529/zion/MVPContext/combined_feature_2021_v2'
+#feature_dir = '/data/hz2529/zion/MVPContext/combined_feature_2021_v2'
+feature_dir = '/home/vss2134/gMVP/dataset/build_feature_out'
 #md22
-feature_dir = '/mnt/BigData/hz2529/gMVP/feature/combined_feature_2021_v2/'
+#feature_dir = '/mnt/BigData/hz2529/gMVP/feature/combined_feature_2021_v2/'
 
 '''
 Still figyring out how this all works, but right now it looks  like there's two input
@@ -139,7 +141,7 @@ def build(path, output, cpu, af):
     df = df.sample(frac=1, random_state=2020).reset_index(drop=True)
 
     if cpu <= 1:
-        build_one_thread(df, output)
+        res = build_one_thread(df, output)
     else:
         num_each = int((df.shape[0] - 1) / cpu) + 1
         pool = []
@@ -155,7 +157,7 @@ def build(path, output, cpu, af):
             p.start()
         for p in pool:
             p.join()
-
+#%%
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
