@@ -20,7 +20,7 @@ feature_dir = f'{base_dir}/feature'
 output_dir = '/home/vss2134/gMVP/dataset/build_feature_out'
 
 ##ADDED
-os.chdir('/data/hz2529/zion/MVPContext/')
+#os.chdir('/data/hz2529/zion/MVPContext/')
 ##
 
 def read_compara(path):
@@ -83,7 +83,7 @@ feature schema
 
 
 #both start and end are 1-based and inclusive.
-def build_one_transcript_feature(transcript_id):
+def build_one_transcript(transcript_id):
     hhblits_path = f'{feature_dir}/{transcript_id}.99.diff0.hhm.npy'
     netsurfp2_path = f'{feature_dir}/{transcript_id}.netsurfp2.json'
     compara_path = f'{feature_dir}/{transcript_id}.compara103'
@@ -92,8 +92,8 @@ def build_one_transcript_feature(transcript_id):
     if not os.path.exists(hhblits_path) or not os.path.exists(
             region_path) or not os.path.exists(
                 netsurfp2_path) or not os.path.exists(compara_path):
-        print(hhblits_path, region_path, netsurfp2_path, compara_path)
-        print('error')
+        #print(hhblits_path, region_path, netsurfp2_path, compara_path)
+        
         return
 
     compara = read_compara(compara_path)
@@ -114,17 +114,17 @@ def build_one_transcript_feature(transcript_id):
 
     #print(hhblits.shape, hhblits2.shape, hhblits3.shape, hhblits4.shape,
     #      compara.shape, struc.shape, region.shape, gene.shape)
-    print(('hhblits' ,hhblits.shape))
-    print(('compara', compara.shape))
-    print(('struc', struc.shape))
-    print(('region', region.shape))
+    # print(('hhblits' ,hhblits.shape))
+    # print(('compara', compara.shape))
+    # print(('struc', struc.shape))
+    # print(('region', region.shape))
     feature = np.concatenate([hhblits, compara, struc, region], axis=-1)
-    print(feature.shape)
+    # print(feature.shape)
 
     output_path = f'{output_dir}/{transcript_id}.pickle'
     with open(output_path, 'wb') as fw:
         pickle.dump(feature, fw)
-    return feature
+    #return feature
 
 
 def build(name_list):
@@ -137,8 +137,9 @@ def build(name_list):
 
 
 def build_multi_thread(input_path, cpu):
-    df = pd.read_csv(input_path, header=None, names=['transcript_id'])
+    df = pd.read_csv(input_path, sep = '\t')
     transcript_list = list(df['transcript_id'].unique())
+    #print(('eee', transcript_list))
     if cpu <= 1:
         build(transcript_list)
     else:
@@ -166,3 +167,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     build_multi_thread(args.input, args.cpu)
+
+# %%
