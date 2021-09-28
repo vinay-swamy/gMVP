@@ -1,5 +1,6 @@
 #%%
-import torch 
+import torch
+from torch.functional import Tensor 
 from torch.utils.data import Dataset, DataLoader
 import pandas as pd
 import numpy as np 
@@ -44,6 +45,7 @@ class ProteinFeatureDataSet(Dataset):
                 torch.tensor(ref_aa),
                 torch.tensor(alt_aa),
                 torch.tensor(label),
+                torch.tensor(mask),
                 var_id
         )
         
